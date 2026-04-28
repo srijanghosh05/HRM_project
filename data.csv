@@ -1,0 +1,31 @@
+employee_id,employee_name,department,role,attendance_percent,project_completion_rate,peer_feedback_score,attendance_jan,attendance_feb,attendance_mar,attendance_apr,reward_history_points,badge_history,canva_certificate_placeholder,canva_badge_placeholder
+EMP001,Aarav Sharma,Engineering,Backend Developer,96,94,91,95,97,96,96,860,Silver Performance Badge,canva_certificate_gold_placeholder,canva_badge_gold_placeholder
+EMP002,Meera Iyer,Engineering,Data Analyst,88,86,84,90,87,88,88,780,Bronze Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
+EMP003,Rohan Gupta,Sales,Sales Executive,72,79,76,76,72,70,72,650,Progress Badge,canva_certificate_bronze_placeholder,canva_badge_bronze_placeholder
+EMP004,Sanya Verma,HR,HR Associate,92,89,93,91,92,93,92,820,Silver Performance Badge,canva_certificate_gold_placeholder,canva_badge_gold_placeholder
+EMP005,Kabir Khan,Engineering,Frontend Developer,64,70,68,68,65,63,64,520,Progress Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP006,Anika Rao,Operations,Operations Coordinator,98,97,95,98,97,99,98,910,Gold Performance Badge,canva_certificate_gold_placeholder,canva_badge_gold_placeholder
+EMP007,Dev Patel,Finance,Finance Analyst,83,78,81,84,82,83,83,700,Bronze Performance Badge,canva_certificate_bronze_placeholder,canva_badge_bronze_placeholder
+EMP008,Nisha Menon,Marketing,Content Strategist,57,61,62,58,57,56,57,410,Coaching Support Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP009,Arjun Nair,Sales,Account Manager,91,93,88,90,91,92,91,845,Silver Performance Badge,canva_certificate_gold_placeholder,canva_badge_gold_placeholder
+EMP010,Priya Singh,HR,Recruiter,78,74,80,76,78,79,78,620,Bronze Performance Badge,canva_certificate_bronze_placeholder,canva_badge_bronze_placeholder
+EMP011,Sameer Das,Engineering,ML Engineer,0,96,88,0,0,0,0,430,Manual Review Badge,canva_certificate_review_placeholder,canva_badge_review_placeholder
+EMP012,Tara Bose,Customer Success,Support Specialist,94,55,83,95,94,93,94,590,Progress Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP013,Vikram Sethi,Operations,Logistics Analyst,81,84,79,80,81,82,81,690,Bronze Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
+EMP014,Isha Malhotra,Marketing,Campaign Manager,89,91,92,88,89,90,89,810,Silver Performance Badge,canva_certificate_gold_placeholder,canva_badge_gold_placeholder
+EMP015,Neel Joshi,Finance,Payroll Specialist,69,64,71,70,68,69,69,530,Progress Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP016,Aditi Kapoor,Engineering,QA Engineer,93,88,86,92,93,94,93,790,Silver Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
+EMP017,Manav Bhatia,Sales,Business Development Associate,61,58,54,63,61,60,61,390,Coaching Support Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP018,Leela Krishnan,Customer Success,Customer Success Manager,87,82,90,86,87,88,87,760,Silver Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
+EMP019,Yash Chandra,Operations,Process Lead,95,92,89,94,95,96,95,850,Silver Performance Badge,canva_certificate_gold_placeholder,canva_badge_gold_placeholder
+EMP020,Ritika Sen,Marketing,SEO Specialist,74,68,73,75,74,73,74,575,Progress Badge,canva_certificate_bronze_placeholder,canva_badge_bronze_placeholder
+EMP021,Irfan Ali,Engineering,DevOps Engineer,99,98,94,99,99,98,99,940,Gold Performance Badge,canva_certificate_gold_placeholder,canva_badge_gold_placeholder
+EMP022,Kavya Reddy,HR,Learning Coordinator,85,79,87,84,85,86,85,710,Bronze Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
+EMP023,Om Prakash,Finance,Accounts Executive,52,49,57,54,53,51,52,310,Coaching Support Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP024,Zoya Mir,Sales,Regional Sales Lead,90,87,85,91,90,89,90,800,Silver Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
+EMP025,Harsh Mehta,Customer Success,Technical Support Engineer,97,93,47,96,97,98,97,670,Manual Review Badge,canva_certificate_review_placeholder,canva_badge_review_placeholder
+EMP026,Diya Thomas,Engineering,Product Analyst,82,90,84,81,82,83,82,740,Silver Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
+EMP027,Krish Jain,Operations,Inventory Planner,76,81,77,75,76,77,76,640,Bronze Performance Badge,canva_certificate_bronze_placeholder,canva_badge_bronze_placeholder
+EMP028,Maya Pillai,Marketing,Brand Associate,68,72,65,69,68,67,68,500,Progress Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP029,Rahul Kulkarni,Finance,Audit Associate,91,63,69,92,91,90,91,560,Progress Badge,canva_certificate_progress_placeholder,canva_badge_progress_placeholder
+EMP030,Avni Shah,HR,People Analytics Intern,79,85,82,78,79,80,79,705,Bronze Performance Badge,canva_certificate_silver_placeholder,canva_badge_silver_placeholder
