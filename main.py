@@ -11,8 +11,10 @@ import streamlit as st
 from auth import (
     authenticate_user,
     create_employee_user,
+    find_user_by_email,
     is_valid_email,
     is_valid_employee_id,
+    public_user,
     validate_password_strength,
 )
 from model import (
@@ -38,7 +40,7 @@ st.set_page_config(
 
 
 @st.cache_data
-def get_analysis() -> tuple[pd.DataFrame, pd.DataFrame]:
+def get_analysis(data_mtime: float) -> tuple[pd.DataFrame, pd.DataFrame]:
     return build_reward_analysis(DATA_FILE)
 
 
@@ -48,7 +50,7 @@ def apply_theme() -> None:
         <style>
         .block-container {
             max-width: 1180px;
-            padding-top: 1.25rem;
+            padding-top: 5rem;
             padding-bottom: 2rem;
         }
         h1, h2, h3 {
@@ -63,6 +65,49 @@ def apply_theme() -> None:
             border: 1px solid #e2e8f0;
             border-radius: 8px;
             padding: 0.7rem 0.85rem;
+        }
+        .badge-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 1px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 1rem;
+        }
+        .certificate-container {
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+        .metric-label {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        .metric-value-large {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 0.5rem;
+        }
+        /* Target the streamlit container for uniform height */
+        [data-testid="stVerticalBlockBorderWrapper"] {
+            min-height: 150px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            justify-content: space-between !important;
+        }
+        .metric-container-inner {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
         }
         div.stButton > button,
         div.stDownloadButton > button {
@@ -132,14 +177,29 @@ def start_session(user: dict[str, object]) -> None:
         "user": user,
         "expires_at": time.time() + SESSION_TTL_SECONDS,
     }
+    # Persist email in URL to survive refresh
+    st.query_params["session_user"] = user["email"]
 
 
 def get_current_user() -> dict[str, object] | None:
     session = st.session_state.get("auth_session")
+    
+    # Try to restore from query params if session state is empty (happens on refresh)
+    if not session:
+        stored_email = st.query_params.get("session_user")
+        if stored_email:
+            user = find_user_by_email(stored_email)
+            if user:
+                # Restore the session safely
+                start_session(public_user(user))
+                return public_user(user)
+
     if not session:
         return None
 
     if time.time() > session.get("expires_at", 0):
+        # Clear query params if expired
+        st.query_params.clear()
         st.session_state.pop("auth_session", None)
         queue_toast("Session expired. Please sign in again.")
         return None
@@ -150,13 +210,14 @@ def get_current_user() -> dict[str, object] | None:
 
 def logout() -> None:
     st.session_state.pop("auth_session", None)
+    st.query_params.clear()
     queue_toast("Signed out successfully.")
     set_route(LOGIN_ROUTE)
 
 
 def show_auth_header(subtitle: str) -> None:
     st.markdown('<div class="auth-shell">', unsafe_allow_html=True)
-    st.markdown('<div class="auth-title">AI HR Reward System</div>', unsafe_allow_html=True)
+    st.markdown('<div class="auth-title">SmartRewardX</div>', unsafe_allow_html=True)
     st.markdown(f'<div class="auth-subtitle">{subtitle}</div>', unsafe_allow_html=True)
 
 
@@ -319,7 +380,7 @@ def show_signup_page() -> None:
 
 
 def render_sidebar(user: dict[str, object]) -> None:
-    st.sidebar.title("AI HR Reward System")
+    st.sidebar.title("SmartRewardX")
     st.sidebar.write(user["full_name"])
     st.sidebar.caption(f"{str(user['role']).title()} | {user['email']}")
     st.sidebar.divider()
@@ -368,16 +429,84 @@ def employee_dashboard(df: pd.DataFrame, user: dict[str, object]) -> None:
         )
         return
 
-    employee = matched.iloc[0]
+    employee = matched.iloc[0].copy()
+    
+    # Map legacy placeholders from CSV to actual asset paths
+    asset_map = {
+        "canva_badge_gold_placeholder": "assets/badge_gold.png",
+        "canva_badge_silver_placeholder": "assets/badge_silver.png",
+        "canva_badge_bronze_placeholder": "assets/badge_bronze.png",
+        "canva_badge_progress_placeholder": "assets/badge_progress.png",
+        "canva_badge_support_placeholder": "assets/badge_support.png",
+        "canva_certificate_gold_placeholder": "assets/certificate_gold.png",
+        "canva_certificate_silver_placeholder": "assets/certificate_silver.png",
+        "canva_certificate_bronze_placeholder": "assets/certificate_bronze.png",
+        "canva_certificate_progress_placeholder": "assets/certificate_progress.png",
+        "canva_certificate_support_placeholder": "assets/certificate_support.png",
+    }
+    
+    if employee["canva_badge_placeholder"] in asset_map:
+        employee["canva_badge_placeholder"] = asset_map[employee["canva_badge_placeholder"]]
+    if employee["canva_certificate_placeholder"] in asset_map:
+        employee["canva_certificate_placeholder"] = asset_map[employee["canva_certificate_placeholder"]]
 
     st.subheader(f"{employee['employee_name']} | {employee['role']}")
     st.caption(f"Department: {employee['department']} | Employee ID: {employee['employee_id']}")
 
     score_col, points_col, badge_col, cluster_col = st.columns(4)
-    score_col.metric("Total Score", format_score(employee["total_score"]))
-    points_col.metric("Reward Points", int(employee["reward_points"]))
-    badge_col.metric("Badge Earned", employee["badge_earned"])
-    cluster_col.metric("Fairness Group", employee["fairness_group"])
+    
+    with score_col:
+        with st.container(border=True):
+            st.markdown('<div class="metric-label" style="text-align:center">Total Score</div>', unsafe_allow_html=True)
+            st.markdown('<div class="metric-container-inner">', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-value-large">{format_score(employee["total_score"])}</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+    
+    with points_col:
+        with st.container(border=True):
+            st.markdown('<div class="metric-label" style="text-align:center">Reward Points</div>', unsafe_allow_html=True)
+            st.markdown('<div class="metric-container-inner">', unsafe_allow_html=True)
+            st.markdown(f'<div class="metric-value-large">{int(employee["reward_points"])}</div>', unsafe_allow_html=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+    
+    with badge_col:
+        with st.container(border=True):
+            st.markdown('<div class="metric-label" style="text-align:center">Badge Tier</div>', unsafe_allow_html=True)
+            st.markdown('<div class="metric-container-inner">', unsafe_allow_html=True)
+            c1, c2, c3 = st.columns([1, 2, 1])
+            with c2:
+                try:
+                    st.image(employee["canva_badge_placeholder"], width=80)
+                except:
+                    st.write(employee["badge_earned"])
+            st.markdown('</div>', unsafe_allow_html=True)
+    
+    with cluster_col:
+        with st.container(border=True):
+            st.markdown('<div class="metric-label" style="text-align:center">Fairness Group</div>', unsafe_allow_html=True)
+            st.markdown('<div class="metric-container-inner">', unsafe_allow_html=True)
+            fairness_img = {
+                "High productivity peer group": "assets/fairness_high.png",
+                "Consistent productivity peer group": "assets/fairness_consistent.png",
+                "Growth support peer group": "assets/fairness_growth.png"
+            }.get(employee["fairness_group"], "")
+            
+            c1, c2, c3 = st.columns([1, 2, 1])
+            with c2:
+                try:
+                    if fairness_img:
+                        st.image(fairness_img, width=80)
+                    else:
+                        st.write(employee["fairness_group"])
+                except:
+                    st.write(employee["fairness_group"])
+            st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown('<div style="margin-top: 1rem;"></div>', unsafe_allow_html=True)
+    st.markdown('<div class="badge-container">', unsafe_allow_html=True)
+    st.markdown(f"### {employee['badge_earned']}")
+    st.write(f"**Reward:** {employee['reward_action']}")
+    st.markdown('</div>', unsafe_allow_html=True)
 
     st.divider()
 
@@ -448,23 +577,24 @@ def employee_dashboard(df: pd.DataFrame, user: dict[str, object]) -> None:
             st.success("No anomaly flags for this record.")
 
     st.divider()
-    st.subheader("Canva AI Certificate and Badge Placeholders")
-    st.dataframe(
-        pd.DataFrame(
-            [
-                {
-                    "Asset Type": "Badge",
-                    "Placeholder": employee["canva_badge_placeholder"],
-                },
-                {
-                    "Asset Type": "Certificate",
-                    "Placeholder": employee["canva_certificate_placeholder"],
-                },
-            ]
-        ),
-        use_container_width=True,
-        hide_index=True,
-    )
+    st.subheader("Your Achievement Certificate")
+    
+    st.markdown('<div class="certificate-container">', unsafe_allow_html=True)
+    try:
+        st.image(employee["canva_certificate_placeholder"], use_container_width=True)
+        
+        # Add a download button for the certificate
+        with open(employee["canva_certificate_placeholder"], "rb") as f:
+            st.download_button(
+                label="Download Certificate",
+                data=f,
+                file_name=f"Certificate_{employee['employee_id']}.png",
+                mime="image/png",
+                use_container_width=True
+            )
+    except:
+        st.info("Certificate asset is being generated or was not found in the assets folder.")
+    st.markdown('</div>', unsafe_allow_html=True)
 
 
 def managerial_view(df: pd.DataFrame, cluster_summary: pd.DataFrame) -> None:
@@ -599,23 +729,10 @@ def export_and_assets_view(df: pd.DataFrame) -> None:
     ]
     st.dataframe(export_preview, use_container_width=True, hide_index=True)
 
-    st.subheader("Replaceable Canva AI Placeholders")
-    asset_table = (
-        df[
-            [
-                "badge_earned",
-                "canva_badge_placeholder",
-                "canva_certificate_placeholder",
-            ]
-        ]
-        .drop_duplicates()
-        .sort_values("badge_earned")
-    )
-    st.dataframe(asset_table, use_container_width=True, hide_index=True)
 
 
 def show_manager_dashboard() -> None:
-    df, cluster_summary = get_analysis()
+    df, cluster_summary = get_analysis(DATA_FILE.stat().st_mtime)
     dashboard_tab, export_tab = st.tabs(["Dashboard", "Power BI and Canva Assets"])
     with dashboard_tab:
         managerial_view(df, cluster_summary)
@@ -624,7 +741,7 @@ def show_manager_dashboard() -> None:
 
 
 def show_employee_dashboard(user: dict[str, object]) -> None:
-    df, _ = get_analysis()
+    df, _ = get_analysis(DATA_FILE.stat().st_mtime)
     employee_dashboard(df, user)
 
 

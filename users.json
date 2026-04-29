@@ -370,5 +370,17 @@
     "admin_created": true,
     "password_hash": "pbkdf2_sha256$260000$dJNSF2zu5HXQPHAVqotaNA==$83jnqZIXB4ZlhUt4NX9NxRN7ykjMxOY8A33G9w0LqYI=",
     "created_at": "2026-04-28T16:34:00+00:00"
+  },
+  {
+    "user_id": "84a633d6-65fb-4732-8438-56a3ca641d63",
+    "full_name": "Srijan Ghosh",
+    "employee_id": "EMP07",
+    "email": "srijan@company.com",
+    "department": "Engineering",
+    "role": "employee",
+    "role_locked": true,
+    "admin_created": false,
+    "password_hash": "pbkdf2_sha256$260000$/5Q2+jUVDCDtQkbaiClfPA==$gUzk8Su2Oswhte0kTg1lnYCYLVUi7/t0pFAy3UNefQo=",
+    "created_at": "2026-04-29T13:52:26.058733+00:00"
   }
 ]
