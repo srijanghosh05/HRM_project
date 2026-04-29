@@ -48,95 +48,127 @@ def apply_theme() -> None:
     st.markdown(
         """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        html, body, [data-testid="stAppViewContainer"] {
+            font-family: 'Inter', sans-serif;
+        }
+
         .block-container {
-            max-width: 1180px;
-            padding-top: 5rem;
+            max-width: 1200px;
+            padding-top: 4rem;
             padding-bottom: 2rem;
         }
-        h1, h2, h3 {
-            color: #0f766e;
-            letter-spacing: 0;
+
+        /* Enhanced Headers */
+        h1 {
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            font-size: 2.5rem !important;
+            margin-bottom: 0.5rem !important;
         }
-        div[data-testid="stSidebar"] {
-            border-right: 1px solid #d9e8e2;
+        h2, h3 {
+            color: #2dd4bf !important;
+            font-weight: 700 !important;
+            letter-spacing: -0.025em;
         }
+        
+        /* Metric Cards Visibility */
         div[data-testid="stMetric"] {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            padding: 0.7rem 0.85rem;
-        }
-        .badge-container {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            background: #f8fafc;
-            padding: 1rem;
-            border-radius: 1px;
-            border: 1px solid #e2e8f0;
-            margin-bottom: 1rem;
-        }
-        .certificate-container {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(51, 65, 85, 0.8);
             border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            padding: 1rem;
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s, border-color 0.2s;
         }
+        div[data-testid="stMetric"]:hover {
+            border-color: #2dd4bf;
+            transform: translateY(-2px);
+        }
+
         .metric-label {
-            font-size: 0.9rem;
-            color: #64748b;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
+            font-size: 1rem !important;
+            color: #94a3b8 !important;
+            font-weight: 600 !important;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
         }
         .metric-value-large {
-            font-size: 1.75rem;
-            font-weight: 700;
-            color: #0f172a;
-            margin-top: 0.5rem;
+            font-size: 2.25rem !important;
+            font-weight: 800 !important;
+            color: #ffffff !important;
+            text-shadow: 0 0 20px rgba(45, 212, 191, 0.2);
         }
-        /* Target the streamlit container for uniform height */
-        [data-testid="stVerticalBlockBorderWrapper"] {
-            min-height: 150px !important;
-            display: flex !important;
-            flex-direction: column !important;
-            justify-content: space-between !important;
+
+        /* Container Styling */
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(51, 65, 85, 0.5) !important;
+            border-radius: 16px !important;
+            padding: 1.5rem !important;
         }
-        .metric-container-inner {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
+
+        .badge-container {
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(30, 41, 59, 0.8));
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
         }
-        div.stButton > button,
-        div.stDownloadButton > button {
-            border-radius: 8px;
-            transition: all 0.2s;
+
+        .certificate-container {
+            background: #0f172a;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
+
+        /* Sidebar Refinement */
+        div[data-testid="stSidebar"] {
+            background-color: #0b1120 !important;
+            border-right: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        
+        /* Auth Screens Visibility */
         .auth-shell {
-            max-width: 460px;
+            max-width: 480px;
             margin: 0 auto;
-            padding-top: 2rem;
+            padding: 3rem 2rem;
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 24px;
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            backdrop-filter: blur(12px);
         }
         .auth-title {
-            font-size: 1.65rem;
-            font-weight: 700;
-            color: #14b8a6;
-            margin-bottom: 0.15rem;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(to right, #2dd4bf, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
         }
         .auth-subtitle {
             color: #94a3b8;
-            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
         }
-        @media (max-width: 640px) {
-            .block-container {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-            .auth-shell {
-                padding-top: 0.75rem;
-            }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
         </style>
         """,
@@ -456,18 +488,26 @@ def employee_dashboard(df: pd.DataFrame, user: dict[str, object]) -> None:
     score_col, points_col, badge_col, cluster_col = st.columns(4)
     
     with score_col:
-        with st.container(border=True):
-            st.markdown('<div class="metric-label" style="text-align:center">Total Score</div>', unsafe_allow_html=True)
-            st.markdown('<div class="metric-container-inner">', unsafe_allow_html=True)
-            st.markdown(f'<div class="metric-value-large">{format_score(employee["total_score"])}</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div data-testid="stMetric">
+                <div class="metric-label">Total Score</div>
+                <div class="metric-value-large">{format_score(employee["total_score"])}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
     
     with points_col:
-        with st.container(border=True):
-            st.markdown('<div class="metric-label" style="text-align:center">Reward Points</div>', unsafe_allow_html=True)
-            st.markdown('<div class="metric-container-inner">', unsafe_allow_html=True)
-            st.markdown(f'<div class="metric-value-large">{int(employee["reward_points"])}</div>', unsafe_allow_html=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+        st.markdown(
+            f"""
+            <div data-testid="stMetric">
+                <div class="metric-label">Reward Points</div>
+                <div class="metric-value-large">{int(employee["reward_points"])}</div>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
     
     with badge_col:
         with st.container(border=True):
@@ -478,7 +518,7 @@ def employee_dashboard(df: pd.DataFrame, user: dict[str, object]) -> None:
                 try:
                     st.image(employee["canva_badge_placeholder"], width=80)
                 except:
-                    st.write(employee["badge_earned"])
+                    st.markdown(f'<div class="metric-value-large" style="font-size:1.2rem !important; text-align:center;">{employee["badge_earned"]}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
     
     with cluster_col:
@@ -497,9 +537,9 @@ def employee_dashboard(df: pd.DataFrame, user: dict[str, object]) -> None:
                     if fairness_img:
                         st.image(fairness_img, width=80)
                     else:
-                        st.write(employee["fairness_group"])
+                        st.markdown(f'<div class="metric-value-large" style="font-size:1.1rem !important; text-align:center;">{employee["fairness_group"]}</div>', unsafe_allow_html=True)
                 except:
-                    st.write(employee["fairness_group"])
+                    st.markdown(f'<div class="metric-value-large" style="font-size:1.1rem !important; text-align:center;">{employee["fairness_group"]}</div>', unsafe_allow_html=True)
             st.markdown('</div>', unsafe_allow_html=True)
 
     st.markdown('<div style="margin-top: 1rem;"></div>', unsafe_allow_html=True)
