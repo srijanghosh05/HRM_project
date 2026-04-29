@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import secrets
 import time
 from pathlib import Path
@@ -103,13 +104,6 @@ def apply_theme() -> None:
         }
 
         /* Container Styling */
-        div[data-testid="stVerticalBlockBorderWrapper"] {
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(51, 65, 85, 0.5) !important;
-            border-radius: 16px !important;
-            padding: 1.5rem !important;
-        }
-
         .badge-container {
             background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(30, 41, 59, 0.8));
             border: 1px solid rgba(45, 212, 191, 0.3);
@@ -133,15 +127,6 @@ def apply_theme() -> None:
         }
         
         /* Auth Screens Visibility */
-        .auth-shell {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 3rem 2rem;
-            background: rgba(30, 41, 59, 0.5);
-            border-radius: 24px;
-            border: 1px solid rgba(51, 65, 85, 0.5);
-            backdrop-filter: blur(12px);
-        }
         .auth-title {
             font-size: 2rem;
             font-weight: 800;
@@ -154,6 +139,29 @@ def apply_theme() -> None:
             color: #94a3b8;
             font-size: 1.1rem;
             margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .glass-logo-box {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 10px 10px;
+            margin: 0 auto 0rem auto;
+            max-width: 300px;
+            width: 100%;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-logo-box:hover {
+            border-color: rgba(45, 212, 191, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
         }
 
         /* Scrollbar */
@@ -247,14 +255,38 @@ def logout() -> None:
     set_route(LOGIN_ROUTE)
 
 
+def get_base64_image(path: str) -> str:
+    try:
+        if not Path(path).exists():
+            return ""
+        with open(path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+    except Exception:
+        return ""
+
+
 def show_auth_header(subtitle: str) -> None:
-    st.markdown('<div class="auth-shell">', unsafe_allow_html=True)
-    st.markdown('<div class="auth-title">SmartRewardX</div>', unsafe_allow_html=True)
+    # Glass Logo Box
+    logo_path = "C:/Users/Lenovo/.gemini/antigravity/brain/8b303543-fb40-44b2-89db-4a015a11ffc4/smartrewardx_panoramic_logo_v4_1777477152822.png"
+    logo_b64 = get_base64_image(logo_path)
+    
+    if logo_b64:
+        st.markdown(
+            f"""
+            <div class="glass-logo-box">
+                <img src="data:image/png;base64,{logo_b64}" style="max-width: 400px; width: 100%; height: 200px; mix-blend-mode: screen; filter: brightness(1.1) contrast(1.1);">
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+    else:
+        st.markdown('<div class="auth-title" style="text-align: center;">SmartRewardX</div>', unsafe_allow_html=True)
+    
     st.markdown(f'<div class="auth-subtitle">{subtitle}</div>', unsafe_allow_html=True)
 
 
 def close_auth_header() -> None:
-    st.markdown("</div>", unsafe_allow_html=True)
+    pass
 
 
 def show_login_page() -> None:
