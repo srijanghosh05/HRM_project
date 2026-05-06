@@ -380,7 +380,7 @@
     "role": "employee",
     "role_locked": true,
     "admin_created": false,
-    "password_hash": "pbkdf2_sha256$260000$/5Q2+jUVDCDtQkbaiClfPA==$gUzk8Su2Oswhte0kTg1lnYCYLVUi7/t0pFAy3UNefQo=",
+    "password_hash": "pbkdf2_sha256$260000$pZfQLApID5hABZg2wup13g==$vBln4/LR71oHa6xmvm1xZbl7wQz1prXJUi/jKmKqp28=",
     "created_at": "2026-04-29T13:52:26.058733+00:00"
   }
 ]
